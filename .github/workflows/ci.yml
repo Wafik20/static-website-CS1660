@@ -36,6 +36,6 @@ jobs:
       - name: Upload Files to Google Cloud Storage
         uses: google-github-actions/upload-cloud-storage@v1
         with:
-          path: "public"
+          path: "/"
           destination: "gs://cs1660-static-website"
           parent: false
