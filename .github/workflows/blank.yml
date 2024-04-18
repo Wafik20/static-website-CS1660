@@ -13,24 +13,34 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  deploy:
+    runs-on: ubuntu-22.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.119.0'
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      - name: Build
+        run: hugo --minify
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2  # Updated to use version 2
+        with:
+          workload_identity_provider: 'projects/1073125370900/locations/global/workloadIdentityPools/github/providers/my-repo'
+          service_account: 'service-account-static-website@kvm-nested-vm.iam.gserviceaccount.com'
+
+      - name: Upload files to Google Cloud Storage
+        uses: google-github-actions/upload-cloud-storage@v1
+        with:
+          path: 'public'
+          destination: 'gs://cs1660-static-website'  # Ensure this is the correct GCS bucket path
+          parent: false
