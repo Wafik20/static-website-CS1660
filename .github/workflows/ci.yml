@@ -1,16 +1,13 @@
-name: Static Site
+name: Deploy Static Website
 
 on:
   push:
     branches:
-      - master  # Set a branch to deploy
-      - gha-service-account
+      - main
   pull_request:
-    branches: [ "master", "gha-service-account" ]  # Specify branches for pull requests if needed
-
-permissions:
-  contents: read
-  id-token: write
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -18,12 +15,11 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      
-      - name: Setup and Build Project  # Assuming you need to build or copy files
+
+      - name: Setup and Build Project
         run: |
-          mkdir -p public
-          echo "Building project or copying files to public directory"
-          # Add your build or setup commands here
+          mkdir -p public  # Ensure the directory exists
+          echo "Populate your public directory here"
 
       - name: List contents of the public directory
         run: ls -alh public/
@@ -31,7 +27,7 @@ jobs:
       - name: Upload Files to Google Cloud Storage
         uses: google-github-actions/upload-cloud-storage@v1
         with:
-          path: public
-          destination: gs://cs1660-static-website
+          path: 'public'
+          destination: 'gs://cs1660-static-website'
           parent: false
-
+          process_gcloudignore: false  # Assuming you don't need to ignore files
