@@ -4,14 +4,7 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
-
-permissions:
-  contents: read
-  id-token: write
 
 jobs:
   deploy:
@@ -19,7 +12,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
+      - name: List files in the repository
+        run: ls -alh
+
+      - name: Build or prepare website  # Add or ensure this step is correct
+        run: |
+          echo "Build your site or prepare files here, ensure 'public' directory is created"
+
+      - name: List output directory
+        run: ls -alh public
+
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
@@ -29,6 +32,6 @@ jobs:
       - name: Upload files to Google Cloud Storage
         uses: google-github-actions/upload-cloud-storage@v1
         with:
-          path: 'public'
-          destination: 'gs://cs1660-static-website'
+          path: 'public'  # Make sure this is the directory where your site's files are located
+          destination: 'gs://cs1660-static-website'  # Confirm this is the correct GCS bucket path
           parent: false
