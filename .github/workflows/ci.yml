@@ -33,6 +33,9 @@ jobs:
         with:
           workload_identity_provider: "projects/1073125370900/locations/global/workloadIdentityPools/github/providers/my-repo"
           service_account: "service-account-static-website@kvm-nested-vm.iam.gserviceaccount.com"
+          permissions: |
+            contents: 'read'
+            id-token: 'write'
 
       - name: Upload Files to Google Cloud Storage
         uses: google-github-actions/upload-cloud-storage@v1
