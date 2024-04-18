@@ -3,10 +3,10 @@ name: Static Site
 on:
   push:
     branches:
-      - main  # Set a branch to deploy
+      - master  # Set a branch to deploy
       - gha-service-account
   pull_request:
-    branches: [ "main", "gha-service-account" ]  # Specify branches for pull requests if needed
+    branches: [ "master", "gha-service-account" ]  # Specify branches for pull requests if needed
 
 permissions:
   contents: read
