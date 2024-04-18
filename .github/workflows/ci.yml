@@ -18,27 +18,17 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      
-      - name: List all files and directories
-        run: ls -alh
 
       - name: Setup and Build Project
         run: |
           mkdir -p public  # Ensure the directory exists
           cp about.html index.css index.html index.js public/
-          echo "Populate your public directory here"
-
-      - name: List contents of the public directory
-        run: ls -alh public/
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
           workload_identity_provider: "projects/1073125370900/locations/global/workloadIdentityPools/github/providers/my-repo"
           service_account: "service-account-static-website@kvm-nested-vm.iam.gserviceaccount.com"
-          permissions: |
-            contents: 'read'
-            id-token: 'write'
 
       - name: Upload Files to Google Cloud Storage
         uses: google-github-actions/upload-cloud-storage@v1
