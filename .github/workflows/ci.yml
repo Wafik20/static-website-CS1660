@@ -20,6 +20,7 @@ jobs:
         run: |
           mkdir -p public  # Ensure the directory exists
           echo "Populate your public directory here"
+          cp -r src/* public/
 
       - name: List contents of the public directory
         run: ls -alh public/
