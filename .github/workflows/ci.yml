@@ -22,7 +22,7 @@ jobs:
       - name: Setup and Build Project
         run: |
           mkdir -p public  # Ensure the directory exists
-          cp -r src/* public/
+          cp about.html index.css index.html index.js public/
           echo "Populate your public directory here"
 
       - name: List contents of the public directory
