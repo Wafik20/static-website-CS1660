@@ -28,10 +28,15 @@ jobs:
       - name: List contents of the public directory
         run: ls -alh public/
 
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: "projects/1073125370900/locations/global/workloadIdentityPools/github/providers/my-repo"
+          service_account: "service-account-static-website@kvm-nested-vm.iam.gserviceaccount.com"
+
       - name: Upload Files to Google Cloud Storage
         uses: google-github-actions/upload-cloud-storage@v1
         with:
-          path: 'public'
-          destination: 'gs://cs1660-static-website'
+          path: "public"
+          destination: "gs://cs1660-static-website"
           parent: false
-          process_gcloudignore: false  # Assuming you don't need to ignore files
