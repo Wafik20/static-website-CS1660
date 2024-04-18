@@ -15,12 +15,15 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+      
+      - name: List all files and directories
+        run: ls -alh
 
       - name: Setup and Build Project
         run: |
           mkdir -p public  # Ensure the directory exists
-          echo "Populate your public directory here"
           cp -r src/* public/
+          echo "Populate your public directory here"
 
       - name: List contents of the public directory
         run: ls -alh public/
